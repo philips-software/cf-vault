@@ -8,6 +8,23 @@ Based on this repo: https://github.com/making/cf-vault
 cf create-service hsdp-rds postgres-micro-dev postgres-vault
 ```
 
+### Initializing PostgreSQL schema
+
+Vault requires PostgreSQL 9.5 or newer. [Documentation](https://www.vaultproject.io/docs/configuration/storage/postgresql.html)
+The Vault backend plugin doesn't create the schema automatically. Execute below SQL for that:
+
+```
+CREATE TABLE vault_kv_store (
+  parent_path TEXT COLLATE "C" NOT NULL,
+  path        TEXT COLLATE "C",
+  key         TEXT COLLATE "C",
+  value       BYTEA,
+  CONSTRAINT pkey PRIMARY KEY (path, key)
+);
+
+CREATE INDEX parent_path_idx ON vault_kv_store (parent_path);
+```
+
 ## Or MySQL
 
 ```
