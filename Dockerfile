@@ -1,7 +1,12 @@
 FROM alpine:latest
-RUN mkdir /apps
-ADD vault /apps/vault
-ADD run.sh /apps/run.sh
-WORKDIR /apps
+
+RUN apk update \
+ && apk add jq \
+ && rm -rf /var/cache/apk/*
+
+RUN mkdir /app
+ADD vault /app/vault
+ADD run.sh /app/run.sh
+WORKDIR /app
 EXPOSE 8080
-CMD ["/apps/run.sh"]
+CMD ["/app/run.sh"]
