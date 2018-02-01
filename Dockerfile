@@ -1,4 +1,5 @@
 FROM alpine:latest
+MAINTAINER Andy Lo-A-Foe <andy.lo-a-foe@philips.com>
 
 RUN apk update \
  && apk add jq \
