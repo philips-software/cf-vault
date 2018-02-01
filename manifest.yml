@@ -1,0 +1,11 @@
+applications:
+- name: vault-dev
+  buildpack: binary_buildpack
+  memory: 128m
+  command: './run.sh'
+  services:
+  - postgres_vault
+  #env:
+  #  VAULT_UNSEAL_KEY1: key1
+  #  VAULT_UNSEAL_KEY2: key2
+  #  VAULT_UNSEAL_KEY3: key3
