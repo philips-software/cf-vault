@@ -58,12 +58,12 @@ if [ "$VAULT_UNSEAL_KEY1" != "" ];then
 	sleep 1
 	echo "#### Unsealing..."
 	if [ "$VAULT_UNSEAL_KEY1" != "" ];then
-		./vault unseal $VAULT_UNSEAL_KEY1
+		./vault operator unseal $VAULT_UNSEAL_KEY1
 	fi
 	if [ "$VAULT_UNSEAL_KEY2" != "" ];then
-		./vault unseal $VAULT_UNSEAL_KEY2
+		./vault operator unseal $VAULT_UNSEAL_KEY2
 	fi
 	if [ "$VAULT_UNSEAL_KEY3" != "" ];then
-		./vault unseal $VAULT_UNSEAL_KEY3
+		./vault operator unseal $VAULT_UNSEAL_KEY3
 	fi
 fi
