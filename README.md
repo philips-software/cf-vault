@@ -91,7 +91,7 @@ Now, you can access Vault via like `https://cf-vault.cfapps.io`. Subdomain shoul
 
 ```
 export VAULT_ADDR=https://<your-sub-domain>.cfapps.io
-vault init
+vault operator init
 ```
 
 you'll see five unseal keys and root token
@@ -109,9 +109,9 @@ Initial Root Token: db2c7fae-7162-d09e-7901-66d47360c62f
 Unseal Vault with three of five unseal keys, for example:
 
 ```
-vault unseal w6rUcrlOEd4tI0MNtCYxG2uUoGj8wG9euXm4RiHq7BDh
-vault unseal tkGGsCQJeNyORbz2uRyWjCq03kj/OPtGzmM/Bjv9+RTP
-vault unseal 584Sg15Itt8zJpiJOBh+1IVKp56Hv9FiryiK63dztA7C
+vault operator unseal w6rUcrlOEd4tI0MNtCYxG2uUoGj8wG9euXm4RiHq7BDh
+vault operator unseal tkGGsCQJeNyORbz2uRyWjCq03kj/OPtGzmM/Bjv9+RTP
+vault operator unseal 584Sg15Itt8zJpiJOBh+1IVKp56Hv9FiryiK63dztA7C
 ```
 
 Authenticate with the root token, for example:
