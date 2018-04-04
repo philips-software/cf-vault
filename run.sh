@@ -2,8 +2,33 @@
 
 PSQL=`echo $VCAP_SERVICES | grep "postgres"`
 PMYSQL=`echo $VCAP_SERVICES | grep "mysql"`
+PDYNDB=`echo $VCAP_SERVICES | grep "dynamodb"`
 
-if [ "$PSQL" != "" ]; then
+if [ "$PDYNDB" != "" ]; then
+    SERVICE="hsdp-dynamodb"
+    REGION=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.aws_region'`
+    TABLE=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.table_name'`
+    AWS_KEY=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.aws_key'`
+    AWS_SECRET=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.aws_secret'`
+
+cat <<EOF > cf.hcl
+disable_mlock = true
+storage "dynamodb" {
+  ha_enabled = "false"
+  region = "$REGION"
+  table = "$TABLE"
+  max_parallel = 4
+  access_key = "$AWS_KEY"
+  secret_key = "$AWS_SECRET"
+}
+
+listener "tcp" {
+ address = "0.0.0.0:8080"
+ tls_disable = 1
+}
+EOF
+
+elif [ "$PSQL" != "" ]; then
     SERVICE="hsdp-rds"
     CONNECTION_URL=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.uri'`
 
