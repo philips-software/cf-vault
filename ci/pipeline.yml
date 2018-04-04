@@ -1,0 +1,36 @@
+resources:
+- name: git-phm.vault
+  type: git
+  source:
+    uri: ((tfs-emea.base-url))/tfs/TPC_Region14/PHM/_git/PHM.Vault
+    branch: master
+    username: ((tfs-emea.username))
+    password: ((tfs-emea.password))
+
+- name: version
+  type: semver
+  source:
+      driver: git
+      uri: ((tfs-emea.base-url))/tfs/TPC_Region14/PHM/_git/PHM.Vault
+      branch: version
+      file: version
+      username: ((tfs-emea.username))
+      password: ((tfs-emea.password))
+      initial_version: "0.0.0"
+
+- name: docker-repo-resource
+  type: docker-image
+  source:
+      repository: ((hsdp-docker-na1.repo)):443/phm_images/phm.vault
+      username: ((hsdp-docker-na1.username))
+      password: ((hsdp-docker-na1.password))
+
+jobs:
+    - name: build
+      plan:
+          - get: git-phm.vault
+            trigger: true
+          - get: version
+            params: {file: version, bump: patch}
+          - put: docker-repo-resource
+            params: {build: git-phm.vault}
