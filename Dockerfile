@@ -25,7 +25,7 @@ RUN grep -E '_linux_amd64' < vault_${VAULT_VERSION}_SHA256SUMS | sha256sum -c
 RUN unzip vault_${VAULT_VERSION}_linux_amd64.zip
 
 FROM alpine:latest 
-MAINTAINER Andy Lo-A-Foe <andy.lo-a-foe@philips.com>
+LABEL maintainer="Andy Lo-A-Foe <andy.lo-a-foe@philips.com>"
 RUN apk update \
  && apk add jq \
  && apk add ca-certificates \
