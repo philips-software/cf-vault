@@ -34,4 +34,6 @@ jobs:
           - get: version
             params: {file: version, bump: patch}
           - put: docker-repo-resource
-            params: {build: git-phm.vault}
+            params: {build: git-phm.vault, tag: version/version}
+          - put: version
+            params: {file: version/version}  
