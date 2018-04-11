@@ -36,4 +36,4 @@ jobs:
           - put: docker-repo-resource
             params: {build: git-phm.vault, tag: version/version}
           - put: version
-            params: {file: version/version}  
+            params: {file: version/version, tag_as_latest: true}
