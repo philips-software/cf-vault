@@ -147,6 +147,4 @@ cf set-env cf-vault VAULT_UNSEAL_KEY2 tkGGsCQJeNyORbz2uRyWjCq03kj/OPtGzmM/Bjv9+R
 cf set-env cf-vault VAULT_UNSEAL_KEY3 584Sg15Itt8zJpiJOBh+1IVKp56Hv9FiryiK63dztA7
 ```
 
-Even if you do `cf restart cf-vault` or `cf restage cf-vaault`, `cf-vault` will be available.
-Of course you can set these variables in your `manifest.yml`.
-
+**WARNING**: Anyone who has access to your CF ENV will effectively have access to all secrets stored in your Vault if you choose to expose your unseal keys like this.
