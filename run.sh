@@ -13,6 +13,7 @@ if [ "$PDYNDB" != "" ]; then
 
 cat <<EOF > cf.hcl
 disable_mlock = true
+ui = true
 storage "dynamodb" {
   ha_enabled = "false"
   region = "$REGION"
