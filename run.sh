@@ -35,7 +35,7 @@ elif [ "$PSQL" != "" ]; then
 
 cat <<EOF > cf.hcl
 disable_mlock = true
-
+ui = true
 storage "postgresql" {
   connection_url = "$CONNECTION_URL"
 }
