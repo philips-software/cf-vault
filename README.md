@@ -2,10 +2,14 @@
 
 Based on this repo: https://github.com/making/cf-vault
 
-## Create PostgreSQL instance
+## Upstream repo
+
+Current: `https://phm-develop.visualstudio.com/PHE/_git/vault`
+
+## PostgreSQL backend
 
 ```
-cf create-service hsdp-rds postgres-micro-dev postgres-vault
+$ cf create-service hsdp-rds postgres-micro-dev postgres-vault
 ```
 
 ### Initializing PostgreSQL schema
@@ -25,22 +29,32 @@ CREATE TABLE vault_kv_store (
 CREATE INDEX parent_path_idx ON vault_kv_store (parent_path);
 ```
 
-## Or MySQL
+## MySQL backend
 
 ```
-cf create-service hsdp-rds mysql-micro-dev mysql-vault
+$ cf create-service hsdp-rds mysql-micro-dev mysql-vault
 ```
 
-## Deploy Vault
+## Deploying Vault
+
+### Docker
+
+The preferred way of deployment is using Docker. See the `Dockerfile` for details. First build and publish the docker image to a docker registry. In the example below we have published it to the HSDP Docker registry:
 
 ```
-cp manifest-example.yml manifest.yml 
+$ CF_DOCKER_PASSWORD=mypassword cf push vault --docker-image docker.na1.hsdp.io/phm_images/vault --docker-username myusername
+```
+
+### Using manifest.yml
+
+```
+$ cp manifest-example.yml manifest.yml 
 ```
 
 Change `name` if needed, then
 
 ```
-cf push
+$ cf push
 ```
 
 you can see vault has started successfully as following:
@@ -90,8 +104,8 @@ Now, you can access Vault via like `https://cf-vault.cfapps.io`. Subdomain shoul
 
 
 ```
-export VAULT_ADDR=https://<your-sub-domain>.cfapps.io
-vault operator init
+$ export VAULT_ADDR=https://<your-sub-domain>.cfapps.io
+$ vault operator init
 ```
 
 you'll see five unseal keys and root token
@@ -117,7 +131,7 @@ vault operator unseal 584Sg15Itt8zJpiJOBh+1IVKp56Hv9FiryiK63dztA7C
 Authenticate with the root token, for example:
 
 ```
-vault auth db2c7fae-7162-d09e-7901-66d47360c62f
+$ vault auth db2c7fae-7162-d09e-7901-66d47360c62f
 ```
 
 finally, you can read and write Vault :)
@@ -133,7 +147,7 @@ refresh_interval	768h0m0s
 vaule           	world
 ```
 
-## Unseal when restarting
+### Unseal when restarting
 
 Because Vault seals when it restarts, you need to unseal automatically in order to keep Vault available in CF environment.
 
@@ -142,9 +156,9 @@ If you set environment variables `VAULT_UNSEAL_KEY1`, `VAULT_UNSEAL_KEY2` and `V
 For example:
 
 ```
-cf set-env cf-vault VAULT_UNSEAL_KEY1 w6rUcrlOEd4tI0MNtCYxG2uUoGj8wG9euXm4RiHq7BDh
-cf set-env cf-vault VAULT_UNSEAL_KEY2 tkGGsCQJeNyORbz2uRyWjCq03kj/OPtGzmM/Bjv9+RTP
-cf set-env cf-vault VAULT_UNSEAL_KEY3 584Sg15Itt8zJpiJOBh+1IVKp56Hv9FiryiK63dztA7
+$ cf set-env cf-vault VAULT_UNSEAL_KEY1 w6rUcrlOEd4tI0MNtCYxG2uUoGj8wG9euXm4RiHq7BDh
+$ cf set-env cf-vault VAULT_UNSEAL_KEY2 tkGGsCQJeNyORbz2uRyWjCq03kj/OPtGzmM/Bjv9+RTP
+$ cf set-env cf-vault VAULT_UNSEAL_KEY3 584Sg15Itt8zJpiJOBh+1IVKp56Hv9FiryiK63dztA7
 ```
 
 **WARNING**: Anyone who has access to your CF ENV will effectively have access to all secrets stored in your Vault if you choose to expose your unseal keys like this.
