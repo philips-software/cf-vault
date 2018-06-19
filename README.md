@@ -137,14 +137,14 @@ $ vault auth db2c7fae-7162-d09e-7901-66d47360c62f
 finally, you can read and write Vault :)
 
 ```
-$ vault write secret/hello vaule=world
+$ vault write secret/hello value=world
 Success! Data written to: secret/hello
 
 $ vault read secret/hello
 Key             	Value
 ---             	-----
 refresh_interval	768h0m0s
-vaule           	world
+value           	world
 ```
 
 ### Unseal when restarting
