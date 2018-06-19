@@ -4,16 +4,24 @@ PSQL=`echo $VCAP_SERVICES | grep "postgres"`
 PMYSQL=`echo $VCAP_SERVICES | grep "mysql"`
 PDYNDB=`echo $VCAP_SERVICES | grep "dynamodb"`
 
+cat <<EOF > cf.hcl
+disable_mlock = true
+ui = true
+
+listener "tcp" {
+ address = "0.0.0.0:8080"
+ tls_disable = 1
+}
+
+EOF
+
 if [ "$PDYNDB" != "" ]; then
     SERVICE="hsdp-dynamodb"
     REGION=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.aws_region'`
     TABLE=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.table_name'`
     AWS_KEY=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.aws_key'`
     AWS_SECRET=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.aws_secret'`
-
-cat <<EOF > cf.hcl
-disable_mlock = true
-ui = true
+cat <<EOF >> cf.hcl
 storage "dynamodb" {
   ha_enabled = "false"
   region = "$REGION"
@@ -22,40 +30,27 @@ storage "dynamodb" {
   access_key = "$AWS_KEY"
   secret_key = "$AWS_SECRET"
 }
-
-listener "tcp" {
- address = "0.0.0.0:8080"
- tls_disable = 1
-}
 EOF
+fi
 
-elif [ "$PSQL" != "" ]; then
+if [ "$PSQL" != "" ]; then
     SERVICE="hsdp-rds"
     CONNECTION_URL=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.uri'`
-
-cat <<EOF > cf.hcl
-disable_mlock = true
-ui = true
+cat <<EOF >> cf.hcl
 storage "postgresql" {
   connection_url = "$CONNECTION_URL"
 }
-
-listener "tcp" {
- address = "0.0.0.0:8080"
- tls_disable = 1
-}
 EOF
+fi
 
-else
+if [ "$PMYSQL" != "" ]; then
     SERVICE="hsdp-rds"
     HOSTNAME=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.hostname'`
     PASSWORD=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.password'`
     PORT=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.port'`
     USERNAME=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.username'`
     DATABASE=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.db_name'`
-
-cat <<EOF > cf.hcl
-disable_mlock = true
+cat <<EOF >> cf.hcl
 storage "mysql" {
   username = "$USERNAME"
   password = "$PASSWORD"
@@ -64,15 +59,21 @@ storage "mysql" {
   table = "vault"
   max_parallel = 4
 }
-listener "tcp" {
- address = "0.0.0.0:8080"
- tls_disable = 1
-}
 EOF
-
 fi
 
-echo "detected $SERVICE"
+if [ "$STORAGE_STANZA" != "" ]; then
+    SERVICE="custom"
+    echo "$STORAGE_STANZA" >> cf.hcl
+fi
+
+# Abort if no storage backend was detected
+if [ "x$SERVICE" == "x" ]; then
+    echo "No storage detected. Exiting..."
+    exit 1
+fi
+
+echo "detected $SERVICE storage"
 
 echo "#### Starting Vault..."
 

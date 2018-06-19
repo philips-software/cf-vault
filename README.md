@@ -1,10 +1,16 @@
-# Vault on Cloud foundry
+# Dockerized Vault 
 
 Based on this repo: https://github.com/making/cf-vault
+
+Most of this README deals with deploying Vault to a Cloud foundry environment. If you decide to deploy to a 
+non Cloud foundry environment please pay special attention to the `Custom backend` section which describes how
+you can configure persistent storage via the environment.
 
 ## Upstream repo
 
 Current: `https://phm-develop.visualstudio.com/PHE/_git/vault`
+
+# Storage backends
 
 ## PostgreSQL backend
 
@@ -35,9 +41,23 @@ CREATE INDEX parent_path_idx ON vault_kv_store (parent_path);
 $ cf create-service hsdp-rds mysql-micro-dev mysql-vault
 ```
 
-## Deploying Vault
+# Custom backend
 
-### Docker
+The image will attempt to autodetect bound storage in Cloud foundry (PostgreSQL, MySQL and DynamoDB supported).
+If none of the above service types are bound or if you are deploying to a non Cloud Foundry environment you can
+pass a storage stanza section in a `STORAGE_STANZA` environment variable.
+
+Documentation on this can be found [here](https://www.vaultproject.io/docs/configuration/storage/index.html)
+
+Example for filesystem storage:
+
+```
+$ STORAGE_STANZA="storage \"file\" { path = \"/mnt/vault/data\" }" custom_deploy_this.sh
+```
+
+# Deploying Vault to CF
+
+## Docker
 
 The preferred way of deployment is using Docker. See the `Dockerfile` for details. First build and publish the docker image to a docker registry. In the example below we have published it to the HSDP Docker registry:
 
@@ -100,8 +120,7 @@ $ cf logs cf-vault --recent
 
 Now, you can access Vault via like `https://cf-vault.cfapps.io`. Subdomain should be different for your case.
 
-## Initialize vault
-
+# Initialize vault
 
 ```
 $ export VAULT_ADDR=https://<your-sub-domain>.cfapps.io
@@ -147,7 +166,7 @@ refresh_interval	768h0m0s
 value           	world
 ```
 
-### Unseal when restarting
+## Unseal when restarting
 
 Because Vault seals when it restarts, you need to unseal automatically in order to keep Vault available in CF environment.
 
