@@ -1,4 +1,4 @@
-# Dockerized Vault 
+# cf-vault
 
 Based on this repo: https://github.com/making/cf-vault
 
