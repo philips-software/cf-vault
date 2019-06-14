@@ -48,7 +48,7 @@ Documentation on this can be found [here](https://www.vaultproject.io/docs/confi
 Example for filesystem storage:
 
 ```
-$ STORAGE\_STANZA="storage \"file\" { path = \"/mnt/vault/data\" }" custom\_deploy\_this.sh
+$ STORAGE_STANZA="storage \"file\" { path = \"/mnt/vault/data\" }" custom_deploy_this.sh
 ```
 
 # Deploying Vault to CF
@@ -58,7 +58,7 @@ $ STORAGE\_STANZA="storage \"file\" { path = \"/mnt/vault/data\" }" custom\_depl
 The preferred way of deployment is using Docker. See the `Dockerfile` for details. First build and publish the docker image to a docker registry. Example push:
 
 ```
-$ CF\_DOCKER\_PASSWORD=mypassword cf push vault --docker-image some.docker.rep/vault --docker-username myusername
+$ CF_DOCKER_PASSWORD=mypassword cf push vault --docker-image some.docker.rep/vault --docker-username myusername
 ```
 
 ### Using manifest.yml
