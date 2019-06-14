@@ -28,7 +28,7 @@ CREATE TABLE vault_kv_store (
   CONSTRAINT pkey PRIMARY KEY (path, key)
 );
 
-CREATE INDEX parent\_path\_idx ON vault\_kv\_store (parent_path);
+CREATE INDEX parent_path_idx ON vault_kv_store (parent_path);
 ```
 
 ## MySQL backend
