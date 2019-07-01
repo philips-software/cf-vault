@@ -1,6 +1,6 @@
-# Contributing to logproxy
+# Contributing to cf-vault
 
-We'd love for you to contribute to our source code and to make the logproxy even better than it is today!
+We'd love for you to contribute to our source code and to make the cf-vault even better than it is today!
  Here are the guidelines we'd like you to follow:
 
  - [Question or Problem?](#question)
@@ -68,7 +68,7 @@ Before you submit your merge request consider the following guidelines:
     git push origin my-fix-branch
     ```
 
-In Github, send a pull request to original master branch: f.e. `logproxy:master`.
+In Github, send a pull request to original master branch: f.e. `cf-vault:master`.
 If we suggest changes, then:
 
 * Make the required updates.
@@ -119,4 +119,4 @@ from the main (upstream) repository:
 ## <a name="info"></a> Info
 
 [contribute]: CONTRIBUTING.md
-[github]: https://github.com/philips-software/logproxy/issues 
+[github]: https://github.com/philips-software/cf-vault/issues 
