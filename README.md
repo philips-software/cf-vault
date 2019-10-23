@@ -166,9 +166,9 @@ value           	world
 
 Because Vault seals when it restarts, you need to unseal automatically in order to keep Vault available in CF environment.
 
-If you set environment variables `VAULT_UNSEAL_KEY1`, `VAULT_UNSEAL_KEY2` and `VAULT_UNSEAL_KEY3`, Vaule will be unsealed at the start up
+If you set environment variables `VAULT_UNSEAL_KEY1`, `VAULT_UNSEAL_KEY2` and `VAULT_UNSEAL_KEY3`, Vault will be unsealed at startup
 
-For example:
+Example:
 
 ```
 $ cf set-env cf-vault VAULT_UNSEAL_KEY1 w6rUcrlOEd4tI0MNtCYxG2uUoGj8wG9euXm4RiHq7BDh
