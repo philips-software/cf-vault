@@ -81,8 +81,11 @@ echo "#### Starting Vault..."
 
 if [ "$VAULT_UNSEAL_KEY1" != "" ];then
 	export VAULT_ADDR='http://127.0.0.1:8080'
-	echo "#### Waiting..."
-	sleep 1
+  while wget -O - $VAULT_ADDR/v1/sys/health 2>&1 | grep "Connection refused" 
+  do
+    echo "#### Waiting for vault to start..."
+    sleep 1
+  done
 	echo "#### Unsealing..."
 	if [ "$VAULT_UNSEAL_KEY1" != "" ];then
 		./vault operator unseal $VAULT_UNSEAL_KEY1
