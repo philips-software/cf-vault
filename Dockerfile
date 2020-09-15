@@ -1,5 +1,5 @@
 FROM alpine:latest AS builder
-ENV VAULT_VERSION 1.3.2
+ENV VAULT_VERSION 1.5.3
 
 
 WORKDIR /vault
