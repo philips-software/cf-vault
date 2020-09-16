@@ -39,8 +39,10 @@ if [ "$PSQL" != "" ]; then
 cat <<EOF >> cf.hcl
 storage "postgresql" {
   connection_url = "$CONNECTION_URL"
+  ha_enabled = "true"
 }
 EOF
+    psql --echo-all "$CONNECTION_URL" < /app/vault-schema.sql
 fi
 
 if [ "$PMYSQL" != "" ]; then

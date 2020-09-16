@@ -3,10 +3,7 @@ ENV VAULT_VERSION 1.5.3
 
 
 WORKDIR /vault
-RUN apk update \
- && apk add curl \
- && apk add gnupg \
- && apk add unzip 
+RUN apk add --no-cache git openssh gcc musl-dev curl gnupg unzip
 
 # Download Vault and verify checksums (https://www.hashicorp.com/security.html)
 COPY resources/hashicorp.asc /tmp/
@@ -26,13 +23,11 @@ RUN unzip vault_${VAULT_VERSION}_linux_amd64.zip
 
 FROM alpine:latest 
 LABEL maintainer="Andy Lo-A-Foe <andy.lo-a-foe@philips.com>"
-RUN apk update \
- && apk add jq \
- && apk add ca-certificates \
- && rm -rf /var/cache/apk/*
+RUN apk add --no-cache jq ca-certificates curl postgresql-client
 
 WORKDIR /app
 COPY --from=builder /vault/vault /app
 COPY --from=builder /vault/run.sh /app
+COPY resources/vault-schema.sql /app
 EXPOSE 8080
 CMD ["/app/run.sh"]
