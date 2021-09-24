@@ -1,7 +1,6 @@
 FROM alpine:latest AS builder
 ENV VAULT_VERSION 1.0.3
-# Download Vault and verify checksums (https://www.hashicorp.com/security.html)
-ENV KEY_ID 72D7468F
+
 
 WORKDIR /vault
 RUN apk update \
@@ -9,10 +8,12 @@ RUN apk update \
  && apk add gnupg \
  && apk add unzip 
 
+# Download Vault and verify checksums (https://www.hashicorp.com/security.html)
+COPY resources/hashicorp.asc /tmp/
 ADD run.sh /vault
 # Fix exec permissions issue that come up due to the way source controls deal with executable files.
 RUN chmod a+x /vault/run.sh
-RUN gpg --receive-keys ${KEY_ID}
+RUN gpg --import /tmp/hashicorp.asc
 RUN curl -Os https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip 
 RUN curl -Os https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_SHA256SUMS 
 RUN curl -Os https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_SHA256SUMS.sig
