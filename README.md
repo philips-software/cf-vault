@@ -1,14 +1,10 @@
-# Dockerized Vault 
+# cf-vault
 
 Based on this repo: https://github.com/making/cf-vault
 
 Most of this README deals with deploying Vault to a Cloud foundry environment. If you decide to deploy to a 
 non Cloud foundry environment please pay special attention to the `Custom backend` section which describes how
 you can configure persistent storage via the environment.
-
-## Upstream repo
-
-Current: `https://phm-develop.visualstudio.com/PHE/_git/vault`
 
 # Storage backends
 
@@ -59,10 +55,10 @@ $ STORAGE_STANZA="storage \"file\" { path = \"/mnt/vault/data\" }" custom_deploy
 
 ## Docker
 
-The preferred way of deployment is using Docker. See the `Dockerfile` for details. First build and publish the docker image to a docker registry. In the example below we have published it to the HSDP Docker registry:
+The preferred way of deployment is using Docker. See the `Dockerfile` for details. First build and publish the docker image to a docker registry. Example push:
 
 ```
-$ CF_DOCKER_PASSWORD=mypassword cf push vault --docker-image docker.na1.hsdp.io/phm_images/vault --docker-username myusername
+$ CF_DOCKER_PASSWORD=mypassword cf push vault --docker-image some.docker.rep/vault --docker-username myusername
 ```
 
 ### Using manifest.yml
@@ -170,9 +166,9 @@ value           	world
 
 Because Vault seals when it restarts, you need to unseal automatically in order to keep Vault available in CF environment.
 
-If you set environment variables `VAULT_UNSEAL_KEY1`, `VAULT_UNSEAL_KEY2` and `VAULT_UNSEAL_KEY3`, Vaule will be unsealed at the start up
+If you set environment variables `VAULT_UNSEAL_KEY1`, `VAULT_UNSEAL_KEY2` and `VAULT_UNSEAL_KEY3`, Vault will be unsealed at startup
 
-For example:
+Example:
 
 ```
 $ cf set-env cf-vault VAULT_UNSEAL_KEY1 w6rUcrlOEd4tI0MNtCYxG2uUoGj8wG9euXm4RiHq7BDh

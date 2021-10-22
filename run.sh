@@ -39,8 +39,10 @@ if [ "$PSQL" != "" ]; then
 cat <<EOF >> cf.hcl
 storage "postgresql" {
   connection_url = "$CONNECTION_URL"
+  ha_enabled = "true"
 }
 EOF
+    psql --echo-all "$CONNECTION_URL" < /app/vault-schema.sql
 fi
 
 if [ "$PMYSQL" != "" ]; then
@@ -75,6 +77,11 @@ fi
 
 echo "detected $SERVICE storage"
 
+if [ "x$VAULT_API_ADDR" == "x" ]; then
+   echo "VAULT_API_ADDR is now required. Set it to the public route of your Vault deployment"
+   eixt 1
+fi
+
 echo "#### Starting Vault..."
 
 ./vault server -config=cf.hcl &
@@ -86,8 +93,11 @@ done
 
 if [ "$VAULT_UNSEAL_KEY1" != "" ];then
 	export VAULT_ADDR='http://127.0.0.1:8080'
-	echo "#### Waiting..."
-	sleep 1
+  while wget -O - $VAULT_ADDR/v1/sys/health 2>&1 | grep "Connection refused" 
+  do
+    echo "#### Waiting for vault to start..."
+    sleep 1
+  done
 	echo "#### Unsealing..."
 	if [ "$VAULT_UNSEAL_KEY1" != "" ];then
 		./vault operator unseal $VAULT_UNSEAL_KEY1
