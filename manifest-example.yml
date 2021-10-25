@@ -1,0 +1,10 @@
+applications:
+- name: vault-dev
+  disk_quota: 1G
+  docker:
+    image: your.docker.repo/pathof/cf-vault
+    username: xxx
+  instances: 1
+  memory: 128M
+  routes:
+  - route: vault-dev.cfapp.io
