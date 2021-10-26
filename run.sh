@@ -86,11 +86,6 @@ echo "#### Starting Vault..."
 
 ./vault server -config=cf.hcl &
 
-while wget -O - http://127.0.0.1:8080/v1/sys/health 2>&1 | grep "Connection refused" 
-do 
-  echo "#### Waiting for vault to start"
-done
-
 if [ "$VAULT_UNSEAL_KEY1" != "" ];then
 	export VAULT_ADDR='http://127.0.0.1:8080'
   while wget -O - $VAULT_ADDR/v1/sys/health 2>&1 | grep "Connection refused" 
