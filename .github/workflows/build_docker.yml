@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
-      uses: philips-software/docker-ci-scripts@v3.3.2
+      uses: philips-software/docker-ci-scripts@v4.1.0
       with:
         dockerfile: ./
         image-name: cf-vault
