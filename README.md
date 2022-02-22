@@ -162,6 +162,25 @@ refresh_interval	768h0m0s
 value           	world
 ```
 
+## Enable CF Auth Method
+
+This vault instance allows to use CF as the auth provider which is completely token free authentication. For more information about CF as auth provider, please refer to the following plugin repository. 
+https://github.com/hashicorp/vault-plugin-auth-cf
+
+
+
+Use the docker container to find the checksum of the plugin in file /app/checkum and use in the below command to register the plugin with vault
+```
+vault plugin register \
+    -sha256=plugin_checksum \
+    auth vault-plugin-auth-cf
+```
+Followed by this command to enable this auth method
+```
+vault auth enable vault-plugin-auth-cf
+```
+As mentioned under the readme of the plugin repo, https://github.com/hashicorp/vault-plugin-auth-cf#sample-usage, continue to configure the vault with the additional configuration for the plugin and setting up policies around it. 
+
 ## Unseal when restarting
 
 Because Vault seals when it restarts, you need to unseal automatically in order to keep Vault available in CF environment.
