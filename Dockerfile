@@ -11,6 +11,8 @@ ENV PATH /go/bin:$PATH
 # Download Vault and verify checksums (https://www.hashicorp.com/security.html)
 COPY resources/hashicorp.asc /tmp/
 ADD run.sh /vault
+
+# Build vault-auth-cf-plugin
 RUN go install github.com/mitchellh/gox@latest && \
     git clone https://github.com/hashicorp/vault-plugin-auth-cf.git && \
     cd vault-plugin-auth-cf && \
@@ -18,6 +20,7 @@ RUN go install github.com/mitchellh/gox@latest && \
     make dev && \
     make tools
 
+# Keep the checksum in a file to be used for plugin registration
 RUN sha256sum /vault/vault-plugin-auth-cf/bin/vault-plugin-auth-cf > checksum
 
 # Fix exec permissions issue that come up due to the way source controls deal with executable files.
