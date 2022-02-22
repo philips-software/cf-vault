@@ -12,6 +12,7 @@ listener "tcp" {
  address = "0.0.0.0:8080"
  tls_disable = 1
 }
+plugin_directory = "/app/plugins"
 
 EOF
 
@@ -79,7 +80,7 @@ echo "detected $SERVICE storage"
 
 if [ "x$VAULT_API_ADDR" == "x" ]; then
    echo "VAULT_API_ADDR is now required. Set it to the public route of your Vault deployment"
-   eixt 1
+   exit 1
 fi
 
 echo "#### Starting Vault..."
