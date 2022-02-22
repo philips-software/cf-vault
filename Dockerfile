@@ -1,13 +1,11 @@
-FROM alpine:latest AS builder
+FROM golang:1.17.7 AS builder
 ENV VAULT_VERSION 1.8.4
 
 
 WORKDIR /vault
-RUN apk add --no-cache git openssh gcc musl-dev curl gnupg unzip go make bash
-# Configure Go
-ENV GOROOT /usr/lib/go
-ENV GOPATH /go
-ENV PATH /go/bin:$PATH
+RUN apt update && \
+    apt install -y git openssh-server gcc musl-dev curl gnupg unzip
+
 # Download Vault and verify checksums (https://www.hashicorp.com/security.html)
 COPY resources/hashicorp.asc /tmp/
 ADD run.sh /vault
