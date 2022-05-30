@@ -6,5 +6,7 @@ applications:
     username: xxx
   instances: 1
   memory: 128M
+  env:
+    VAULT_API_ADDR: https://vault-dev.cfapp.io
   routes:
   - route: vault-dev.cfapp.io
