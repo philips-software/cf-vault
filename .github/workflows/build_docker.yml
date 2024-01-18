@@ -16,7 +16,7 @@ jobs:
         image-name: cf-vault
         tags: latest
       env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: '${{ secrets.DOCKER_PASSWORD }}'
+        REGISTRY_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        REGISTRY_PASSWORD: '${{ secrets.DOCKER_PASSWORD }}'
         DOCKER_ORGANIZATION: philipssoftware
         GITHUB_ORGANIZATION: philips-software
