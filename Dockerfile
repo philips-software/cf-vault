@@ -1,5 +1,5 @@
 FROM golang:1.22.1 AS builder
-ENV VAULT_VERSION 1.8.4
+ENV VAULT_VERSION 1.14.10
 
 
 WORKDIR /vault
