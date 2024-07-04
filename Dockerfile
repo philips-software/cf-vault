@@ -1,4 +1,4 @@
-FROM golang:1.22.2 AS builder
+FROM golang:1.22.5 AS builder
 ENV VAULT_VERSION 1.14.10
 
 
